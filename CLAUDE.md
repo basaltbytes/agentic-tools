@@ -12,9 +12,9 @@ This repository is a **multi-plugin marketplace** for Claude Code, hosted by the
 
 ```
 agentic-tools/
-├── marketplace.json              # Marketplace manifest - lists all available plugins
+├── .claude-plugin/
+│   └── marketplace.json          # Marketplace manifest - lists all available plugins
 ├── README.md                     # User-facing marketplace overview
-├── DISTRIBUTION_GUIDE.md         # Guide for adding plugins and distribution
 ├── CLAUDE.md                     # This file - project context for Claude
 └── <plugin-name>/                # Each plugin in its own directory
     ├── .claude-plugin/
@@ -53,7 +53,7 @@ agentic-tools/
 
 ### Marketplace Structure
 
-- **Root `marketplace.json`**: Declares all plugins and their sources
+- **Root `.claude-plugin/marketplace.json`**: Declares all plugins and their sources
 - **Plugin directories**: Each plugin is self-contained with its own configuration
 - **No nested marketplaces**: Plugins should NOT have their own `marketplace.json` files
 
@@ -119,9 +119,9 @@ Explain what this command is for and when to use it.
 - Dependencies required
 ```
 
-### 4. Update Root `marketplace.json`
+### 4. Update Root `.claude-plugin/marketplace.json`
 
-Add your plugin to the `plugins` array:
+Add your plugin to the `plugins` array in `.claude-plugin/marketplace.json`:
 
 ```json
 {
@@ -156,14 +156,19 @@ Document the plugin in `<plugin-name>/README.md`:
 
 Add the new plugin to the "Available Plugins" section in the root `README.md`
 
+### 7. Version Management
+
+Update the marketplace version in `.claude-plugin/marketplace.json` if needed
+
 ## Important Conventions
 
 ### File Structure Rules
 
-1. **Plugin manifest location**: Always at `.claude-plugin/plugin.json`
-2. **No marketplace.json in plugins**: Only the root has `marketplace.json`
-3. **Commands directory**: Always `commands/` (plural)
-4. **Command files**: Named `<command-name>.md` matching the command slug
+1. **Marketplace manifest**: Always at root `.claude-plugin/marketplace.json`
+2. **Plugin manifest location**: Always at `<plugin-name>/.claude-plugin/plugin.json`
+3. **No marketplace.json in plugins**: Only the root `.claude-plugin/` has `marketplace.json`
+4. **Commands directory**: Always `commands/` (plural) inside each plugin
+5. **Command files**: Named `<command-name>.md` matching the command slug
 
 ### Metadata Consistency
 
@@ -175,7 +180,8 @@ Add the new plugin to the "Available Plugins" section in the root `README.md`
 ### Versioning
 
 - Follow semantic versioning (MAJOR.MINOR.PATCH)
-- Update version in BOTH `plugin.json` AND `marketplace.json` entry
+- Update version in BOTH `<plugin>/.claude-plugin/plugin.json` AND `.claude-plugin/marketplace.json` entry
+- Update marketplace metadata version when adding/removing plugins
 - Document changes in plugin README
 
 ### Command Frontmatter
@@ -220,8 +226,8 @@ claude plugin validate ./plugin-name
 ### Updating a Plugin
 
 1. Make changes to plugin files
-2. Update version in `.claude-plugin/plugin.json`
-3. Update version in root `marketplace.json` entry
+2. Update version in `<plugin>/.claude-plugin/plugin.json`
+3. Update version in root `.claude-plugin/marketplace.json` entry
 4. Update plugin README with changes
 5. Test locally
 6. Commit and push
@@ -229,9 +235,9 @@ claude plugin validate ./plugin-name
 ### Removing a Plugin
 
 1. Remove plugin directory
-2. Remove entry from root `marketplace.json`
+2. Remove entry from `.claude-plugin/marketplace.json`
 3. Remove from root README
-4. Update DISTRIBUTION_GUIDE if needed
+4. Update marketplace version number
 5. Commit and push
 
 ## Development Guidelines
@@ -263,14 +269,14 @@ claude plugin validate ./plugin-name
 When adding a new plugin, ensure:
 
 - [ ] Plugin directory created at root level
-- [ ] `.claude-plugin/plugin.json` exists with correct metadata
-- [ ] Command markdown files in `commands/` with frontmatter
+- [ ] `<plugin>/.claude-plugin/plugin.json` exists with correct metadata
+- [ ] Command markdown files in `<plugin>/commands/` with frontmatter
 - [ ] Plugin `README.md` created and complete
-- [ ] Entry added to root `marketplace.json`
+- [ ] Entry added to `.claude-plugin/marketplace.json`
 - [ ] Root `README.md` updated with new plugin
 - [ ] No `marketplace.json` inside plugin directory
 - [ ] All placeholders replaced with actual values
-- [ ] Tested locally with `claude --plugin-dir`
+- [ ] Tested locally with `claude --plugin-dir ./plugin-name`
 - [ ] Version numbers match in both files
 
 ## Publishing

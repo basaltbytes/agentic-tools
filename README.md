@@ -56,9 +56,9 @@ To add a new plugin to this marketplace:
    │   └── yourcommand.md
    └── README.md
    ```
-3. Add the plugin entry to `marketplace.json`
+3. Add the plugin entry to `.claude-plugin/marketplace.json`
 
-See [DISTRIBUTION_GUIDE.md](./DISTRIBUTION_GUIDE.md) for more details.
+See [CLAUDE.md](./CLAUDE.md) for detailed development guidelines.
 
 ## License
 

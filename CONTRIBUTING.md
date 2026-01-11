@@ -27,129 +27,52 @@ This repository is a **platform-agnostic collection of agentic tools** - automat
 
 ```
 agentic-tools/
-├── tools/                          # Platform-agnostic tool definitions
-│   └── {tool-name}/
-│       ├── tool.json              # Metadata & platform mappings
-│       └── README.md              # Conceptual documentation
+├── .claude-plugin/                # Claude Code marketplace
+│   └── marketplace.json
 │
-└── {platform-specific-dir}/       # Platform implementations
-    └── {tool-name}/
-        └── ...                    # Platform-specific files
+└── {tool-name}-plugin/            # Tool implementations
+    ├── .claude-plugin/
+    │   └── plugin.json
+    ├── commands/
+    │   └── {command}.md
+    └── README.md
 ```
 
 ### Current Platforms
 
-- **Claude Code**: AI-powered code editor plugin system (`.claude-plugin/`)
+- **Claude Code**: Primary platform (marketplace/plugin system)
 
 ## Adding a New Tool
 
-### Step 1: Create Platform-Agnostic Definition
+For Claude Code (currently our primary platform):
 
-Create a new directory in `/tools/{tool-name}/`:
-
-#### `tool.json`
-
-```json
-{
-  "name": "tool-name",
-  "version": "1.0.0",
-  "description": "Brief description of what this tool does",
-  "author": {
-    "name": "Your Name or Organization",
-    "email": "contact@example.com"
-  },
-  "homepage": "https://github.com/basaltbytes/agentic-tools",
-  "repository": "https://github.com/basaltbytes/agentic-tools",
-  "license": "MIT",
-  "keywords": ["relevant", "keywords", "for", "search"],
-  "category": "development-automation",
-  "platforms": {
-    "claude-code": {
-      "source": "../../{tool-name}-plugin",
-      "commands": ["/command-name"],
-      "version": "1.0.0"
-    }
-  },
-  "requirements": {
-    "dependencies": ["required-npm-package"],
-    "devDependencies": ["required-dev-package"],
-    "configFiles": ["required-config-file.json"]
-  },
-  "workflow": {
-    "steps": [
-      "Step 1 description",
-      "Step 2 description",
-      "Step 3 description"
-    ]
-  }
-}
-```
-
-#### `README.md`
-
-Platform-agnostic documentation should include:
-
-- **Overview**: What the tool does conceptually
-- **What It Does**: Detailed workflow description
-- **Requirements**: Dependencies, dev dependencies, config files
-- **How It Works**: Step-by-step workflow with diagrams if helpful
-- **Usage Patterns**: How AI agents should use this tool
-- **Platform Support**: Links to platform-specific implementations
-- **Best Practices**: Tips for effective use
-- **Limitations**: Known constraints or requirements
-
-### Step 2: Create Platform Implementation
-
-For each platform you want to support, create the platform-specific implementation following that platform's conventions.
-
-#### For Claude Code:
+### Step 1: Create Plugin Directory
 
 1. Create `/{tool-name}-plugin/` directory
 2. Add `.claude-plugin/plugin.json` with metadata
 3. Add `commands/{command-name}.md` with AI instructions
-4. Add platform-specific `README.md`
-5. Update `/.claude-plugin/marketplace.json` to include your tool
+4. Add `README.md` with tool documentation
 
-See [Claude Code Development Guide](CLAUDE.md) for detailed instructions.
+See [CLAUDE.md](CLAUDE.md) for detailed file structure and examples.
+
+### Step 2: Update Marketplace Configuration
+
+Add your tool entry to `.claude-plugin/marketplace.json`.
 
 ### Step 3: Update Root Documentation
 
 1. Add your tool to the main `README.md` tool catalog
-2. Update the platform support matrix
+2. Update the "Available Tools" section
 3. Ensure all links work correctly
 
 ## Adding Platform Support
 
-To add support for a new platform to an existing tool:
+To add support for a tool on a new platform (e.g., Cursor):
 
-### 1. Create Platform Implementation
-
-Follow the platform's conventions for:
-- Directory structure
-- Configuration files
-- Command definitions
-- Documentation format
-
-### 2. Update `tool.json`
-
-Add the new platform to the `platforms` section:
-
-```json
-{
-  "platforms": {
-    "claude-code": { ... },
-    "cursor": {
-      "source": "../../cursor-plugins/{tool-name}",
-      "commands": ["cursor-command"],
-      "version": "1.0.0"
-    }
-  }
-}
-```
-
-### 3. Link in Platform-Agnostic README
-
-Update `/tools/{tool-name}/README.md` to include installation instructions for the new platform.
+1. Create platform-specific implementation directory
+2. Follow that platform's conventions for structure and commands
+3. Update tool documentation to note multi-platform support
+4. Update root `README.md` platform support matrix
 
 ## Documentation Standards
 
@@ -210,8 +133,7 @@ git checkout -b add-{tool-name}
 
 ### 2. Develop and Test
 
-- Create tool definition in `/tools/{tool-name}/`
-- Create platform implementation(s)
+- Create plugin directory and implementation
 - Test thoroughly on real projects
 - Update all documentation
 
@@ -224,14 +146,13 @@ git checkout -b add-{tool-name}
 
 ### PR Checklist
 
-- [ ] Tool definition created in `/tools/`
-- [ ] Platform implementation(s) created
+- [ ] Plugin directory created with all required files
 - [ ] All documentation complete
 - [ ] Tests passing
 - [ ] No duplicate code
 - [ ] Follows repository conventions
 - [ ] Links work correctly
-- [ ] Changelog updated (if applicable)
+- [ ] Marketplace configuration updated
 
 ## Code Quality Guidelines
 

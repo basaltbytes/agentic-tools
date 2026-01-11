@@ -10,7 +10,7 @@ This repository is a **collection of agentic tools** - AI-powered development au
 
 ## Repository Philosophy
 
-**Platform-Agnostic Core**: Each tool is defined conceptually in `/tools/` directory, independent of any specific platform. Platform-specific implementations live in separate directories (e.g., `i18next-translate-plugin/` for Claude Code).
+**Multi-Platform Ready**: Tools are designed to be platform-agnostic in concept, with implementations for specific platforms. Currently focused on Claude Code, with architecture that can support future platforms.
 
 **Current Deployment Targets**:
 - Claude Code (via marketplace/plugin system)
@@ -20,11 +20,6 @@ This repository is a **collection of agentic tools** - AI-powered development au
 
 ```
 agentic-tools/
-├── tools/                          # Platform-agnostic tool definitions (source of truth)
-│   └── {tool-name}/
-│       ├── tool.json              # Metadata, requirements, platform mappings
-│       └── README.md              # Conceptual workflow documentation
-│
 ├── .claude-plugin/                # Claude Code marketplace configuration
 │   └── marketplace.json           # Lists all available Claude Code plugins
 │
@@ -33,10 +28,10 @@ agentic-tools/
 │   │   └── plugin.json           # Claude Code plugin manifest
 │   ├── commands/
 │   │   └── {command}.md          # Command definitions with frontmatter
-│   └── README.md                 # Claude Code-specific usage docs
+│   └── README.md                 # Tool documentation
 │
 ├── README.md                      # User-facing repository overview
-├── CONTRIBUTING.md                # Contribution guidelines for all platforms
+├── CONTRIBUTING.md                # Contribution guidelines
 ├── CLAUDE.md                      # This file - context for AI assistants
 └── LICENSE                        # MIT license
 ```
@@ -44,8 +39,7 @@ agentic-tools/
 ## Current Tools
 
 ### i18next-translate
-- **Platform-agnostic definition**: `./tools/i18next-translate/`
-- **Claude Code implementation**: `./i18next-translate-plugin/`
+- **Location**: `./i18next-translate-plugin/`
 - **Command**: `/translate`
 - **Purpose**: Automates finding and fixing hardcoded strings in i18next projects with self-verification loop
 - **Category**: development-automation
@@ -77,60 +71,9 @@ agentic-tools/
 
 ## Adding a New Tool
 
-When creating a new tool, you MUST create BOTH the platform-agnostic definition AND at least one platform implementation.
+When creating a new tool for Claude Code:
 
-### Step 1: Create Platform-Agnostic Tool Definition
-
-Create in `/tools/{tool-name}/`:
-
-#### `tools/{tool-name}/tool.json`
-
-```json
-{
-  "name": "tool-name",
-  "version": "1.0.0",
-  "description": "Clear description of what this tool does",
-  "author": {
-    "name": "Basaltbytes",
-    "email": "contact@basaltbytes.com"
-  },
-  "homepage": "https://github.com/basaltbytes/agentic-tools",
-  "repository": "https://github.com/basaltbytes/agentic-tools",
-  "license": "MIT",
-  "keywords": ["relevant", "keywords"],
-  "category": "development-automation",
-  "platforms": {
-    "claude-code": {
-      "source": "../../{tool-name}-plugin",
-      "commands": ["/command-name"],
-      "version": "1.0.0"
-    }
-  },
-  "requirements": {
-    "dependencies": ["required-packages"],
-    "devDependencies": ["dev-packages"],
-    "configFiles": ["config-files-needed"]
-  },
-  "workflow": {
-    "steps": [
-      "Step 1 description",
-      "Step 2 description"
-    ]
-  }
-}
-```
-
-#### `tools/{tool-name}/README.md`
-
-Platform-agnostic documentation explaining:
-- What the tool does conceptually
-- The workflow it automates
-- Requirements
-- How it works (with diagrams if helpful)
-- Platform support matrix
-- Links to platform-specific implementations
-
-### Step 2: Create Claude Code Plugin Implementation
+### Step 1: Create Plugin Directory Structure
 
 Create `/{tool-name}-plugin/` directory:
 
@@ -187,20 +130,24 @@ What this command is for and when to use it.
 
 #### `README.md`
 
-Add header linking to platform-agnostic docs:
+Tool documentation:
 
 ```markdown
-# {tool-name} - Claude Code Implementation
+# {tool-name}
 
-> **Platform-Specific Implementation**
->
-> This is the Claude Code implementation of the [{tool-name} tool](../tools/{tool-name}).
-> For platform-agnostic documentation and conceptual overview, see the [tool README](../tools/{tool-name}/README.md).
+An agentic tool for Claude Code that [description].
 
-[Rest of Claude Code specific documentation]
+## What it does
+[Detailed explanation]
+
+## Installation
+[Installation instructions]
+
+## Usage
+[Usage examples]
 ```
 
-### Step 3: Update Marketplace Configuration
+### Step 2: Update Marketplace Configuration
 
 Add entry to `.claude-plugin/marketplace.json`:
 
@@ -215,7 +162,7 @@ Add entry to `.claude-plugin/marketplace.json`:
 }
 ```
 
-### Step 4: Update Root README
+### Step 3: Update Root README
 
 Add the new tool to the "Available Tools" section and tool catalog table in `README.md`.
 
@@ -223,11 +170,10 @@ Add the new tool to the "Available Tools" section and tool catalog table in `REA
 
 ### File Structure Rules
 
-1. **Platform-agnostic definitions**: Always in `/tools/{tool-name}/`
-2. **Claude Code plugins**: Always in `/{tool-name}-plugin/` at root level
-3. **Single marketplace.json**: Only in `.claude-plugin/marketplace.json` (not at root, not in plugin dirs)
-4. **Commands directory**: Always `commands/` (plural) inside each plugin
-5. **Command files**: Named `{command-name}.md` matching the command slug
+1. **Claude Code plugins**: Always in `/{tool-name}-plugin/` at root level
+2. **Single marketplace.json**: Only in `.claude-plugin/marketplace.json` (not at root, not in plugin dirs)
+3. **Commands directory**: Always `commands/` (plural) inside each plugin
+4. **Command files**: Named `{command-name}.md` matching the command slug
 
 ### Metadata Consistency
 
@@ -239,8 +185,7 @@ Add the new tool to the "Available Tools" section and tool catalog table in `REA
 ### Versioning
 
 - Follow semantic versioning (MAJOR.MINOR.PATCH)
-- Update version in BOTH `tools/{tool}/tool.json` AND `.claude-plugin/marketplace.json` entry
-- Update version in `{tool}-plugin/.claude-plugin/plugin.json`
+- Update version in BOTH `{tool}-plugin/.claude-plugin/plugin.json` AND `.claude-plugin/marketplace.json` entry
 - Update marketplace metadata version when adding/removing tools
 
 ### Command Frontmatter
@@ -284,15 +229,13 @@ claude plugin validate ./{tool-name}-plugin
 
 1. Create platform-specific implementation directory (e.g., `{tool-name}-cursor/`)
 2. Follow that platform's conventions for structure and commands
-3. Update `tools/{tool-name}/tool.json` to add new platform entry
-4. Update `tools/{tool-name}/README.md` to document new platform
-5. Update root `README.md` platform support matrix
+3. Update tool documentation to note multi-platform support
+4. Update root `README.md` platform support matrix
 
 ### Updating a Tool
 
 1. Make changes to tool files
 2. Update version in:
-   - `tools/{tool-name}/tool.json`
    - `{tool-name}-plugin/.claude-plugin/plugin.json`
    - `.claude-plugin/marketplace.json` entry
 3. Update relevant README files
@@ -301,12 +244,11 @@ claude plugin validate ./{tool-name}-plugin
 
 ### Removing a Tool
 
-1. Remove tool directory from `/tools/`
-2. Remove plugin directory (e.g., `{tool-name}-plugin/`)
-3. Remove entry from `.claude-plugin/marketplace.json`
-4. Remove from root `README.md`
-5. Update marketplace version number
-6. Commit and push
+1. Remove plugin directory (e.g., `{tool-name}-plugin/`)
+2. Remove entry from `.claude-plugin/marketplace.json`
+3. Remove from root `README.md`
+4. Update marketplace version number
+5. Commit and push
 
 ## Development Guidelines
 
@@ -346,13 +288,10 @@ Terminology:
 
 When adding a new tool, ensure:
 
-- [ ] Platform-agnostic definition created in `/tools/{tool-name}/`
-- [ ] `tools/{tool-name}/tool.json` exists with correct metadata
-- [ ] `tools/{tool-name}/README.md` created and complete
 - [ ] Claude Code plugin directory created at `/{tool-name}-plugin/`
-- [ ] `{tool-name}-plugin/.claude-plugin/plugin.json` exists
+- [ ] `{tool-name}-plugin/.claude-plugin/plugin.json` exists with correct metadata
 - [ ] Command markdown files in `{tool-name}-plugin/commands/` with frontmatter
-- [ ] Plugin `README.md` created with platform context header
+- [ ] Plugin `README.md` created and complete
 - [ ] Entry added to `.claude-plugin/marketplace.json`
 - [ ] Root `README.md` updated with new tool
 - [ ] All placeholders replaced with actual values

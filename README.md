@@ -36,8 +36,6 @@ Automated i18next hardcoded string detection and translation workflow with self-
 **Platform Support:**
 - ✅ **Claude Code** - `/translate` command ([docs](./i18next-translate-plugin/README.md))
 
-**Learn more:** [Tool Documentation →](./tools/i18next-translate)
-
 ## Platform Support
 
 ### Claude Code
@@ -67,43 +65,25 @@ We're exploring support for additional AI-powered development platforms. If you'
 
 | Tool | Category | Version | Platforms | Description |
 |------|----------|---------|-----------|-------------|
-| [i18next-translate](./tools/i18next-translate) | Development Automation | 1.0.0 | Claude Code | Automated i18next string externalization with self-verification |
+| [i18next-translate](./i18next-translate-plugin) | Development Automation | 1.0.0 | Claude Code | Automated i18next string externalization with self-verification |
 
 ## For Contributors
 
-### Adding a New Tool
-
 We welcome contributions of new agentic tools! See our [Contributing Guide](./CONTRIBUTING.md) for detailed instructions on:
 
-- Creating platform-agnostic tool definitions
-- Implementing platform-specific versions
+- Creating new tools
+- Adding platform support for existing tools
 - Documentation standards
 - Testing requirements
-
-### Adding Platform Support
-
-To add support for an existing tool on a new platform:
-
-1. Review the tool's platform-agnostic definition in `/tools/{tool-name}/`
-2. Create a platform-specific implementation following that platform's conventions
-3. Update the tool's `tool.json` to include the new platform
-4. Submit a pull request with your implementation
-
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for details.
 
 ## Repository Structure
 
 ```
 agentic-tools/
-├── tools/                          # Platform-agnostic tool definitions
-│   └── {tool-name}/
-│       ├── tool.json              # Metadata, requirements, platform mappings
-│       └── README.md              # Conceptual documentation
-│
 ├── .claude-plugin/                # Claude Code marketplace configuration
 │   └── marketplace.json
 │
-├── {tool-name}-plugin/            # Claude Code implementations
+├── {tool-name}-plugin/            # Tool implementations for Claude Code
 │   ├── .claude-plugin/
 │   │   └── plugin.json
 │   ├── commands/
@@ -112,7 +92,7 @@ agentic-tools/
 │
 ├── README.md                      # This file
 ├── CONTRIBUTING.md                # Contribution guidelines
-├── CLAUDE.md                      # Claude Code development guide
+├── CLAUDE.md                      # Project context for AI assistants
 └── LICENSE                        # MIT license
 ```
 

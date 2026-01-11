@@ -5,8 +5,8 @@
     "email": "contact@basaltbytes.com"
   },
   "metadata": {
-    "description": "Professional development tools and plugins for Claude Code by Basaltbytes",
-    "version": "1.0.0"
+    "description": "AI-powered development automation tools by Basaltbytes - agentic workflows for Claude Code",
+    "version": "1.1.0"
   },
   "plugins": [
     {

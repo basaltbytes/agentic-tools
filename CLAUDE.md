@@ -1,12 +1,22 @@
-# Basaltbytes Agentic Tools - Claude Code Marketplace
+# Claude Code Platform - Development Guide
+
+> **Platform-Specific Documentation**
+>
+> This guide is specific to developing and deploying tools for the Claude Code platform.
+> For general information about this repository and platform-agnostic tool documentation, see the [main README](./README.md).
+> For contribution guidelines applicable to all platforms, see [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Project Overview
 
-This repository is a **multi-plugin marketplace** for Claude Code, hosted by the Basaltbytes organization. It allows users to install multiple development tools and plugins from a single marketplace source.
+This repository is a **collection of agentic tools** with support for multiple AI-powered development platforms. This document focuses on the **Claude Code implementation**, which provides these tools as plugins via a Claude Code marketplace.
 
 **Repository**: `basaltbytes/agentic-tools`
 **Organization**: Basaltbytes
 **Contact**: contact@basaltbytes.com
+
+## Claude Code Marketplace
+
+For Claude Code, this repository functions as a **multi-plugin marketplace** that allows users to install multiple development tools from a single marketplace source.
 
 ## Repository Structure
 

@@ -1,4 +1,9 @@
-# i18next Translate Plugin for Claude Code
+# i18next-translate - Claude Code Implementation
+
+> **Platform-Specific Implementation**
+>
+> This is the Claude Code implementation of the [i18next-translate tool](../tools/i18next-translate).
+> For platform-agnostic documentation and conceptual overview, see the [tool README](../tools/i18next-translate/README.md).
 
 A Claude Code plugin that automates finding and fixing hardcoded strings in i18next projects with a self-verification loop.
 

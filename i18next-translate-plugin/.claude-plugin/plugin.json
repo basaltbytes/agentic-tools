@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "description": "i18next translation workflow with self-verification loop. Finds hardcoded strings, fixes them, and verifies progress using i18next-cli.",
   "author": {
-    "name": "Philippe"
+    "name": "BasaltBytes",
+    "email": "your-email@example.com"
   },
-  "homepage": "https://github.com/YOUR_USERNAME/i18next-translate-plugin",
-  "repository": "https://github.com/YOUR_USERNAME/i18next-translate-plugin",
+  "homepage": "https://github.com/basaltbytes/agentic-tools",
+  "repository": "https://github.com/basaltbytes/agentic-tools",
   "license": "MIT",
   "keywords": ["i18next", "translation", "i18n", "localization", "react-i18next"]
 }

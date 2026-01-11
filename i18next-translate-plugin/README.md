@@ -16,30 +16,28 @@ The `/translate` command runs an automated workflow:
 
 ## Installation
 
-### From a Marketplace
+### Already have the BasaltBytes Marketplace?
 
-If this plugin is hosted in a marketplace you've already added:
+Then install the plugin from the marketplace:
 
-```
-/plugin install i18next-translate@marketplace-name
+```bash
+/plugin install i18next-translate
 ```
 
 ### Direct from GitHub
 
+Add this marketplace to your Claude Code:
+
+```bash
+/plugin marketplace add basaltbytes/agentic-tools
 ```
-/plugin marketplace add YOUR_USERNAME/i18next-translate-plugin
+
+Then install the plugin from the marketplace:
+
+```bash
 /plugin install i18next-translate
 ```
 
-### Local Development
-
-```bash
-# Clone the repo
-git clone https://github.com/YOUR_USERNAME/i18next-translate-plugin.git
-
-# Test locally
-claude --plugin-dir ./i18next-translate-plugin
-```
 
 ## Usage
 

@@ -1,48 +1,56 @@
-# Claude Code Platform - Development Guide
-
-> **Platform-Specific Documentation**
->
-> This guide is specific to developing and deploying tools for the Claude Code platform.
-> For general information about this repository and platform-agnostic tool documentation, see the [main README](./README.md).
-> For contribution guidelines applicable to all platforms, see [CONTRIBUTING.md](./CONTRIBUTING.md).
+# Basaltbytes Agentic Tools - Project Context for AI Assistants
 
 ## Project Overview
 
-This repository is a **collection of agentic tools** with support for multiple AI-powered development platforms. This document focuses on the **Claude Code implementation**, which provides these tools as plugins via a Claude Code marketplace.
+This repository is a **collection of agentic tools** - AI-powered development automation workflows that can be deployed across multiple platforms. Currently supports Claude Code as the primary deployment target, with architecture designed for multi-platform expansion.
 
 **Repository**: `basaltbytes/agentic-tools`
 **Organization**: Basaltbytes
 **Contact**: contact@basaltbytes.com
 
-## Claude Code Marketplace
+## Repository Philosophy
 
-For Claude Code, this repository functions as a **multi-plugin marketplace** that allows users to install multiple development tools from a single marketplace source.
+**Platform-Agnostic Core**: Each tool is defined conceptually in `/tools/` directory, independent of any specific platform. Platform-specific implementations live in separate directories (e.g., `i18next-translate-plugin/` for Claude Code).
+
+**Current Deployment Targets**:
+- Claude Code (via marketplace/plugin system)
+- Future: Cursor, Windsurf, custom CLIs, etc.
 
 ## Repository Structure
 
 ```
 agentic-tools/
-├── .claude-plugin/
-│   └── marketplace.json          # Marketplace manifest - lists all available plugins
-├── README.md                     # User-facing marketplace overview
-├── CLAUDE.md                     # This file - project context for Claude
-└── <plugin-name>/                # Each plugin in its own directory
-    ├── .claude-plugin/
-    │   └── plugin.json          # Plugin manifest (name, version, author, etc.)
-    ├── commands/
-    │   └── <command>.md         # Command definitions with frontmatter
-    └── README.md                 # Plugin-specific documentation
+├── tools/                          # Platform-agnostic tool definitions (source of truth)
+│   └── {tool-name}/
+│       ├── tool.json              # Metadata, requirements, platform mappings
+│       └── README.md              # Conceptual workflow documentation
+│
+├── .claude-plugin/                # Claude Code marketplace configuration
+│   └── marketplace.json           # Lists all available Claude Code plugins
+│
+├── {tool-name}-plugin/            # Claude Code implementation of a tool
+│   ├── .claude-plugin/
+│   │   └── plugin.json           # Claude Code plugin manifest
+│   ├── commands/
+│   │   └── {command}.md          # Command definitions with frontmatter
+│   └── README.md                 # Claude Code-specific usage docs
+│
+├── README.md                      # User-facing repository overview
+├── CONTRIBUTING.md                # Contribution guidelines for all platforms
+├── CLAUDE.md                      # This file - context for AI assistants
+└── LICENSE                        # MIT license
 ```
 
-## Current Plugins
+## Current Tools
 
 ### i18next-translate
-- **Location**: `./i18next-translate-plugin/`
+- **Platform-agnostic definition**: `./tools/i18next-translate/`
+- **Claude Code implementation**: `./i18next-translate-plugin/`
 - **Command**: `/translate`
-- **Purpose**: Automates finding and fixing hardcoded strings in i18next projects
-- **Category**: internationalization
+- **Purpose**: Automates finding and fixing hardcoded strings in i18next projects with self-verification loop
+- **Category**: development-automation
 
-## How This Marketplace Works
+## How Claude Code Marketplace Works
 
 ### Installation by Users
 
@@ -51,41 +59,37 @@ agentic-tools/
    /plugin marketplace add basaltbytes/agentic-tools
    ```
 
-2. They can then install any plugin:
+2. They can then install any tool as a plugin:
    ```bash
    /plugin install i18next-translate
    ```
 
-3. Use the plugin commands:
+3. Use the tool commands:
    ```bash
    /translate
    ```
 
-### Marketplace Structure
+### Marketplace Structure for Claude Code
 
-- **Root `.claude-plugin/marketplace.json`**: Declares all plugins and their sources
-- **Plugin directories**: Each plugin is self-contained with its own configuration
+- **`.claude-plugin/marketplace.json`**: Declares all Claude Code plugins and their sources
+- **Plugin directories**: Each Claude Code plugin is in its own `{name}-plugin/` directory
 - **No nested marketplaces**: Plugins should NOT have their own `marketplace.json` files
 
-## Adding a New Plugin
+## Adding a New Tool
 
-When creating a new plugin for this marketplace:
+When creating a new tool, you MUST create BOTH the platform-agnostic definition AND at least one platform implementation.
 
-### 1. Create Plugin Directory Structure
+### Step 1: Create Platform-Agnostic Tool Definition
 
-```bash
-mkdir <plugin-name>
-cd <plugin-name>
-mkdir -p .claude-plugin commands
-```
+Create in `/tools/{tool-name}/`:
 
-### 2. Create `.claude-plugin/plugin.json`
+#### `tools/{tool-name}/tool.json`
 
 ```json
 {
-  "name": "plugin-name",
+  "name": "tool-name",
   "version": "1.0.0",
-  "description": "Clear, concise description of what this plugin does",
+  "description": "Clear description of what this tool does",
   "author": {
     "name": "Basaltbytes",
     "email": "contact@basaltbytes.com"
@@ -93,106 +97,151 @@ mkdir -p .claude-plugin commands
   "homepage": "https://github.com/basaltbytes/agentic-tools",
   "repository": "https://github.com/basaltbytes/agentic-tools",
   "license": "MIT",
-  "keywords": ["relevant", "keywords", "for", "search"]
+  "keywords": ["relevant", "keywords"],
+  "category": "development-automation",
+  "platforms": {
+    "claude-code": {
+      "source": "../../{tool-name}-plugin",
+      "commands": ["/command-name"],
+      "version": "1.0.0"
+    }
+  },
+  "requirements": {
+    "dependencies": ["required-packages"],
+    "devDependencies": ["dev-packages"],
+    "configFiles": ["config-files-needed"]
+  },
+  "workflow": {
+    "steps": [
+      "Step 1 description",
+      "Step 2 description"
+    ]
+  }
 }
 ```
 
-### 3. Create Command Files
+#### `tools/{tool-name}/README.md`
 
-Each command gets a markdown file in `commands/`:
+Platform-agnostic documentation explaining:
+- What the tool does conceptually
+- The workflow it automates
+- Requirements
+- How it works (with diagrams if helpful)
+- Platform support matrix
+- Links to platform-specific implementations
 
-**File**: `commands/<command-name>.md`
+### Step 2: Create Claude Code Plugin Implementation
+
+Create `/{tool-name}-plugin/` directory:
+
+#### Directory Structure
+
+```bash
+mkdir {tool-name}-plugin
+cd {tool-name}-plugin
+mkdir -p .claude-plugin commands
+```
+
+#### `.claude-plugin/plugin.json`
+
+```json
+{
+  "name": "tool-name",
+  "version": "1.0.0",
+  "description": "Clear, concise description",
+  "author": {
+    "name": "Basaltbytes",
+    "email": "contact@basaltbytes.com"
+  },
+  "homepage": "https://github.com/basaltbytes/agentic-tools",
+  "repository": "https://github.com/basaltbytes/agentic-tools",
+  "license": "MIT",
+  "keywords": ["relevant", "keywords"]
+}
+```
+
+#### `commands/{command-name}.md`
+
+Command file with frontmatter:
 
 ```markdown
 ---
 description: Brief description of what this command does (shown in help)
 ---
 
-# Command Instructions
+# Command Instructions for Claude
 
-Detailed instructions for Claude on how to execute this command.
+Detailed instructions for how to execute this command.
 
 ## Context
-
-Explain what this command is for and when to use it.
+What this command is for and when to use it.
 
 ## Steps
-
 1. First step
 2. Second step
-3. Etc.
 
 ## Important Notes
-
-- Any critical considerations
+- Critical considerations
 - Error handling
-- Dependencies required
 ```
 
-### 4. Update Root `.claude-plugin/marketplace.json`
+#### `README.md`
 
-Add your plugin to the `plugins` array in `.claude-plugin/marketplace.json`:
+Add header linking to platform-agnostic docs:
+
+```markdown
+# {tool-name} - Claude Code Implementation
+
+> **Platform-Specific Implementation**
+>
+> This is the Claude Code implementation of the [{tool-name} tool](../tools/{tool-name}).
+> For platform-agnostic documentation and conceptual overview, see the [tool README](../tools/{tool-name}/README.md).
+
+[Rest of Claude Code specific documentation]
+```
+
+### Step 3: Update Marketplace Configuration
+
+Add entry to `.claude-plugin/marketplace.json`:
 
 ```json
 {
-  "name": "plugin-name",
-  "source": "./plugin-name",
+  "name": "tool-name",
+  "source": "./{tool-name}-plugin",
   "description": "Brief description for marketplace listing",
   "version": "1.0.0",
   "keywords": ["relevant", "keywords"],
-  "category": "category-name"
+  "category": "development-automation"
 }
 ```
 
-**Valid categories**:
-- development
-- testing
-- internationalization
-- documentation
-- productivity
-- utilities
+### Step 4: Update Root README
 
-### 5. Create Plugin README
-
-Document the plugin in `<plugin-name>/README.md`:
-
-- What it does
-- How to install
-- How to use
-- Requirements
-- Examples
-
-### 6. Update Root README
-
-Add the new plugin to the "Available Plugins" section in the root `README.md`
-
-### 7. Version Management
-
-Update the marketplace version in `.claude-plugin/marketplace.json` if needed
+Add the new tool to the "Available Tools" section and tool catalog table in `README.md`.
 
 ## Important Conventions
 
 ### File Structure Rules
 
-1. **Marketplace manifest**: Always at root `.claude-plugin/marketplace.json`
-2. **Plugin manifest location**: Always at `<plugin-name>/.claude-plugin/plugin.json`
-3. **No marketplace.json in plugins**: Only the root `.claude-plugin/` has `marketplace.json`
+1. **Platform-agnostic definitions**: Always in `/tools/{tool-name}/`
+2. **Claude Code plugins**: Always in `/{tool-name}-plugin/` at root level
+3. **Single marketplace.json**: Only in `.claude-plugin/marketplace.json` (not at root, not in plugin dirs)
 4. **Commands directory**: Always `commands/` (plural) inside each plugin
-5. **Command files**: Named `<command-name>.md` matching the command slug
+5. **Command files**: Named `{command-name}.md` matching the command slug
 
 ### Metadata Consistency
 
 1. **Organization**: Always use "Basaltbytes" as author name
 2. **Email**: Always use "contact@basaltbytes.com"
 3. **Repository**: Always point to "https://github.com/basaltbytes/agentic-tools"
-4. **License**: MIT for all plugins
+4. **License**: MIT for all tools
 
 ### Versioning
 
 - Follow semantic versioning (MAJOR.MINOR.PATCH)
-- Update version in BOTH `<plugin>/.claude-plugin/plugin.json` AND `.claude-plugin/marketplace.json` entry
-- Update marketplace metadata version when adding/removing plugins
-- Document changes in plugin README
+- Update version in BOTH `tools/{tool}/tool.json` AND `.claude-plugin/marketplace.json` entry
+- Update version in `{tool}-plugin/.claude-plugin/plugin.json`
+- Update marketplace metadata version when adding/removing tools
 
 ### Command Frontmatter
 
@@ -204,18 +253,16 @@ description: Brief description (required)
 ---
 ```
 
-The description shows up in Claude Code's help system.
-
 ## Testing
 
-### Test Individual Plugin
+### Test Claude Code Plugin
 
 ```bash
 # From plugin directory
 claude --plugin-dir .
 
 # Or from repo root
-claude --plugin-dir ./i18next-translate-plugin
+claude --plugin-dir ./{tool-name}-plugin
 ```
 
 ### Test Entire Marketplace
@@ -228,37 +275,48 @@ claude --marketplace-dir .
 ### Validate Plugin Structure
 
 ```bash
-claude plugin validate ./plugin-name
+claude plugin validate ./{tool-name}-plugin
 ```
 
 ## Common Tasks
 
-### Updating a Plugin
+### Adding Support for a New Platform (e.g., Cursor)
 
-1. Make changes to plugin files
-2. Update version in `<plugin>/.claude-plugin/plugin.json`
-3. Update version in root `.claude-plugin/marketplace.json` entry
-4. Update plugin README with changes
-5. Test locally
-6. Commit and push
+1. Create platform-specific implementation directory (e.g., `{tool-name}-cursor/`)
+2. Follow that platform's conventions for structure and commands
+3. Update `tools/{tool-name}/tool.json` to add new platform entry
+4. Update `tools/{tool-name}/README.md` to document new platform
+5. Update root `README.md` platform support matrix
 
-### Removing a Plugin
+### Updating a Tool
 
-1. Remove plugin directory
-2. Remove entry from `.claude-plugin/marketplace.json`
-3. Remove from root README
-4. Update marketplace version number
+1. Make changes to tool files
+2. Update version in:
+   - `tools/{tool-name}/tool.json`
+   - `{tool-name}-plugin/.claude-plugin/plugin.json`
+   - `.claude-plugin/marketplace.json` entry
+3. Update relevant README files
+4. Test locally
 5. Commit and push
+
+### Removing a Tool
+
+1. Remove tool directory from `/tools/`
+2. Remove plugin directory (e.g., `{tool-name}-plugin/`)
+3. Remove entry from `.claude-plugin/marketplace.json`
+4. Remove from root `README.md`
+5. Update marketplace version number
+6. Commit and push
 
 ## Development Guidelines
 
-### When Working on Plugins
+### When Working on Tools
 
-1. **Test before committing**: Always test plugins locally
-2. **Keep plugins focused**: Each plugin should do one thing well
+1. **Test before committing**: Always test tools locally
+2. **Keep tools focused**: Each tool should do one thing well
 3. **Document thoroughly**: READMEs should be comprehensive
-4. **Use clear command names**: Commands should be intuitive
-5. **Follow existing patterns**: Match the style of existing plugins
+4. **Follow existing patterns**: Match the style of existing tools
+5. **Maintain platform separation**: Keep platform-agnostic and platform-specific code separate
 
 ### Command Design
 
@@ -274,20 +332,32 @@ claude plugin validate ./plugin-name
 3. **Clear descriptions**: Avoid jargon, be specific
 4. **Test all scenarios**: Consider edge cases
 
+## Key Messaging
+
+**This is NOT**: A Claude Code marketplace (though it includes one)
+**This IS**: A collection of agentic tools with multi-platform support
+
+Terminology:
+- "Tools" (not "plugins") for platform-agnostic references
+- "Plugin" only when specifically referring to Claude Code implementation
+- "Agentic tools" or "AI-powered automation workflows" for general description
+
 ## File Checklist
 
-When adding a new plugin, ensure:
+When adding a new tool, ensure:
 
-- [ ] Plugin directory created at root level
-- [ ] `<plugin>/.claude-plugin/plugin.json` exists with correct metadata
-- [ ] Command markdown files in `<plugin>/commands/` with frontmatter
-- [ ] Plugin `README.md` created and complete
+- [ ] Platform-agnostic definition created in `/tools/{tool-name}/`
+- [ ] `tools/{tool-name}/tool.json` exists with correct metadata
+- [ ] `tools/{tool-name}/README.md` created and complete
+- [ ] Claude Code plugin directory created at `/{tool-name}-plugin/`
+- [ ] `{tool-name}-plugin/.claude-plugin/plugin.json` exists
+- [ ] Command markdown files in `{tool-name}-plugin/commands/` with frontmatter
+- [ ] Plugin `README.md` created with platform context header
 - [ ] Entry added to `.claude-plugin/marketplace.json`
-- [ ] Root `README.md` updated with new plugin
-- [ ] No `marketplace.json` inside plugin directory
+- [ ] Root `README.md` updated with new tool
 - [ ] All placeholders replaced with actual values
-- [ ] Tested locally with `claude --plugin-dir ./plugin-name`
-- [ ] Version numbers match in both files
+- [ ] Tested locally
+- [ ] Version numbers consistent across all files
 
 ## Publishing
 
@@ -295,21 +365,21 @@ When ready to publish changes:
 
 ```bash
 git add .
-git commit -m "Add <plugin-name> plugin" # or "Update <plugin-name> v1.2.3"
+git commit -m "Add {tool-name} tool" # or "Update {tool-name} v1.2.3"
 git push origin main
 ```
 
-Users will be able to install the new/updated plugin immediately after the push.
+Users will be able to install the new/updated tool immediately after the push.
 
 ## Support and Maintenance
 
 - Issues and pull requests are welcome
-- Keep plugins maintained and up-to-date
+- Keep tools maintained and up-to-date
 - Respond to user feedback
 - Update documentation as needed
 
 ## Resources
 
+- [Main README](./README.md) - User-facing overview
+- [CONTRIBUTING.md](./CONTRIBUTING.md) - Contribution guidelines
 - [Claude Code Documentation](https://docs.anthropic.com/claude/docs)
-- [Plugin Development Guide](./DISTRIBUTION_GUIDE.md)
-- [Claude Code Plugin Examples](https://github.com/anthropics/claude-plugins-official)

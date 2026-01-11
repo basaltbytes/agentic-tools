@@ -1,6 +1,6 @@
-# BasaltBytes Agentic Tools
+# Basaltbytes Agentic Tools
 
-Professional development tools and plugins for Claude Code by BasaltBytes.
+Professional development tools and plugins for Claude Code by Basaltbytes.
 
 ## Installation
 

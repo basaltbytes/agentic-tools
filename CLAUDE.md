@@ -1,11 +1,11 @@
-# BasaltBytes Agentic Tools - Claude Code Marketplace
+# Basaltbytes Agentic Tools - Claude Code Marketplace
 
 ## Project Overview
 
-This repository is a **multi-plugin marketplace** for Claude Code, hosted by the BasaltBytes organization. It allows users to install multiple development tools and plugins from a single marketplace source.
+This repository is a **multi-plugin marketplace** for Claude Code, hosted by the Basaltbytes organization. It allows users to install multiple development tools and plugins from a single marketplace source.
 
 **Repository**: `basaltbytes/agentic-tools`
-**Organization**: BasaltBytes
+**Organization**: Basaltbytes
 **Contact**: contact@basaltbytes.com
 
 ## Repository Structure
@@ -77,7 +77,7 @@ mkdir -p .claude-plugin commands
   "version": "1.0.0",
   "description": "Clear, concise description of what this plugin does",
   "author": {
-    "name": "BasaltBytes",
+    "name": "Basaltbytes",
     "email": "contact@basaltbytes.com"
   },
   "homepage": "https://github.com/basaltbytes/agentic-tools",
@@ -172,7 +172,7 @@ Update the marketplace version in `.claude-plugin/marketplace.json` if needed
 
 ### Metadata Consistency
 
-1. **Organization**: Always use "BasaltBytes" as author name
+1. **Organization**: Always use "Basaltbytes" as author name
 2. **Email**: Always use "contact@basaltbytes.com"
 3. **Repository**: Always point to "https://github.com/basaltbytes/agentic-tools"
 4. **License**: MIT for all plugins

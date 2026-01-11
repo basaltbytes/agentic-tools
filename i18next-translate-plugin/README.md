@@ -16,7 +16,7 @@ The `/translate` command runs an automated workflow:
 
 ## Installation
 
-### Already have the BasaltBytes Marketplace?
+### Already have the Basaltbytes Marketplace?
 
 Then install the plugin from the marketplace:
 
